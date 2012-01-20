@@ -232,6 +232,15 @@ public class BlockingQueueConsumer {
 		}
 
 		@Override
+		public void handleCancel(String consumerTag) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Received cancellation notice for " + BlockingQueueConsumer.this);
+			}
+			// Signal to the container that we have been cancelled
+			activeObjectCounter.release(BlockingQueueConsumer.this);
+		}
+
+		@Override
 		public void handleCancelOk(String consumerTag) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Received cancellation notice for " + BlockingQueueConsumer.this);
