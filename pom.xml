@@ -6,7 +6,7 @@
 	<name>Spring AMQP Distribution</name>
 	<description><![CDATA[Spring AMQP is framework that makes it easy to write Java applications for the Advanced Message Queue Protocol.  It supports a variety of common high-level messaging patterns, like synchronous and asynchronous consumers, synchronous producers, automatic re-connection, transactions, batching.  The emphasis is on declarative configuration and a POJO programming model without hiding the full power of the underlying protocol.
     ]]></description>
-	<version>1.0.1.BUILD-BT-1.0</version>
+	<version>1.0.1.BUILD-BT-1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules> 
 		<module>spring-amqp-parent</module>
@@ -190,8 +190,8 @@
 	</profiles>
 	<scm>
 		<url>http://github.com/drstevens/spring-amqp</url>
-		<connection>scm:git:git://github.com/drstevens/spring-amqp.git</connection>
-		<developerConnection>scm:git:git://github.com/drstevens/spring-amqp.git</developerConnection>
+		<connection>scm:git:git@github.com:drstevens/spring-amqp.git</connection>
+		<developerConnection>scm:git:git@github.com:drstevens/spring-amqp.git</developerConnection>
 	</scm>
 	<distributionManagement>
 		<!-- see 'staging' profile for dry-run deployment settings -->
