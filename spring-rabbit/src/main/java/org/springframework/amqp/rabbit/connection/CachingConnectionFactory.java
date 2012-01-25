@@ -85,7 +85,7 @@ public class CachingConnectionFactory extends AbstractConnectionFactory {
 	/**
 	 * Create a new CachingConnectionFactory given a host name.
 	 * 
-	 * @param hostName the host name to connect to
+	 * @param port the host name to connect to
 	 */
 	public CachingConnectionFactory(int port) {
 		this(null, port);
