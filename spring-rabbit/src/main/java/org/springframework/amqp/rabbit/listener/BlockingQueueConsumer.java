@@ -205,14 +205,19 @@ public class BlockingQueueConsumer {
 	}
 
 	public void stop() {
-		cancelled.set(true);
-		if (consumer != null && consumer.getChannel() != null && consumer.getConsumerTag() != null) {
+		//Do not attempt to tell broker we are canceled if broker originally canceled us
+		if (!isCancelled() && consumer != null && consumer.getChannel() != null && consumer.getConsumerTag() != null) {
 			RabbitUtils.closeMessageConsumer(consumer.getChannel(), consumer.getConsumerTag(), transactional);
 		}
+		cancelled.set(true);
 		logger.debug("Closing Rabbit Channel: " + channel);
 		// This one never throws exceptions...
 		RabbitUtils.closeChannel(channel);
 		deliveryTags.clear();
+	}
+
+	private boolean isCancelled() {
+		return cancelled.get();
 	}
 
 	private class InternalConsumer extends DefaultConsumer {
@@ -228,6 +233,7 @@ public class BlockingQueueConsumer {
 			}
 			shutdown = sig;
 			// The delivery tags will be invalid if the channel shuts down
+			//stop()
 			deliveryTags.clear();
 		}
 
@@ -236,6 +242,9 @@ public class BlockingQueueConsumer {
 			if (logger.isErrorEnabled()) {
 				logger.error("Received unexpected cancellation notice for " + BlockingQueueConsumer.this);
 			}
+			cancelled.set(true); //we were canceled by the server
+			shutdown = new ShutdownSignalException(false, false, consumerTag, channel);
+
 			// Signal to the container that we have been cancelled
 			activeObjectCounter.release(BlockingQueueConsumer.this);
 		}
@@ -252,7 +261,7 @@ public class BlockingQueueConsumer {
 		@Override
 		public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
 				throws IOException {
-			if (cancelled.get()) {
+			if (isCancelled()) {
 				if (acknowledgeMode.isTransactionAllowed()) {
 					return;
 				}
