@@ -243,7 +243,7 @@ public class BlockingQueueConsumer {
 				logger.error("Received unexpected cancellation notice for " + BlockingQueueConsumer.this);
 			}
 			cancelled.set(true); //we were canceled by the server
-			shutdown = new ShutdownSignalException(false, false, consumerTag, channel);
+			shutdown = new ShutdownSignalException(false, false, "Received unexpected cancellation notice for " + BlockingQueueConsumer.this, channel);
 
 			// Signal to the container that we have been cancelled
 			activeObjectCounter.release(BlockingQueueConsumer.this);
