@@ -233,7 +233,6 @@ public class BlockingQueueConsumer {
 			}
 			shutdown = sig;
 			// The delivery tags will be invalid if the channel shuts down
-			//stop()
 			deliveryTags.clear();
 		}
 
