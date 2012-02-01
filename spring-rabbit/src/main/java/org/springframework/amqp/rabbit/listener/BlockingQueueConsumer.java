@@ -15,6 +15,7 @@ package org.springframework.amqp.rabbit.listener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
@@ -30,6 +31,7 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactoryUtils;
+import org.springframework.amqp.rabbit.connection.Consumer;
 import org.springframework.amqp.rabbit.connection.RabbitUtils;
 import org.springframework.amqp.rabbit.support.MessagePropertiesConverter;
 
@@ -48,7 +50,7 @@ import com.rabbitmq.utility.Utility;
  * @author Dave Syer
  *
  */
-public class BlockingQueueConsumer {
+public class BlockingQueueConsumer implements Consumer {
 
 	private static Log logger = LogFactory.getLog(BlockingQueueConsumer.class);
 
@@ -89,7 +91,7 @@ public class BlockingQueueConsumer {
 	public BlockingQueueConsumer(ConnectionFactory connectionFactory,
 			MessagePropertiesConverter messagePropertiesConverter,
 			ActiveObjectCounter<BlockingQueueConsumer> activeObjectCounter, AcknowledgeMode acknowledgeMode,
-			boolean transactional, int prefetchCount, String... queues) {
+			boolean transactional, int prefetchCount, String... queues)  {
 		this.connectionFactory = connectionFactory;
 		this.messagePropertiesConverter = messagePropertiesConverter;
 		this.activeObjectCounter = activeObjectCounter;
@@ -97,6 +99,10 @@ public class BlockingQueueConsumer {
 		this.transactional = transactional;
 		this.prefetchCount = prefetchCount;
 		this.queues = queues;
+	}
+
+	public String[] getQueues() {
+		return Arrays.copyOf(queues, queues.length);
 	}
 
 	public Channel getChannel() {

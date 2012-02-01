@@ -14,6 +14,7 @@
 package org.springframework.amqp.rabbit.listener;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
@@ -94,6 +95,8 @@ public class SimpleMessageListenerContainer extends AbstractMessageListenerConta
 
 	private volatile MessagePropertiesConverter messagePropertiesConverter = new DefaultMessagePropertiesConverter();
 
+	private final CompositeConsumerListener consumerListener = new CompositeConsumerListener();
+
 	public static interface ContainerDelegate {
 		void invokeListener(Channel channel, Message message) throws Exception;
 	}
@@ -119,6 +122,14 @@ public class SimpleMessageListenerContainer extends AbstractMessageListenerConta
 	 */
 	public SimpleMessageListenerContainer(ConnectionFactory connectionFactory) {
 		this.setConnectionFactory(connectionFactory);
+	}
+
+	/**
+	 * Add a listener to the lifecycle of consumers
+	 * @param listener listener to call on consumer lifecycle events
+	 */
+	public void addConsumerListener(ConsumerListener listener) {
+		this.consumerListener.addDelegate(listener);
 	}
 
 	/**
@@ -383,6 +394,9 @@ public class SimpleMessageListenerContainer extends AbstractMessageListenerConta
 					this.cancellationLock.release(consumer);
 					this.consumers.remove(consumer);
 					consumer = createBlockingQueueConsumer();
+
+					consumerListener.onRestart(consumer);
+
 					this.consumers.add(consumer);
 				} catch (RuntimeException e) {
 					logger.warn("Consumer failed irretrievably on restart. " + e.getClass() + ": " + e.getMessage());
