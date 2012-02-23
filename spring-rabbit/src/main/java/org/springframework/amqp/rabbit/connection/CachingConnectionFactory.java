@@ -20,6 +20,7 @@ import java.lang.reflect.Proxy;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.rabbitmq.client.ReturnListener;
 import org.springframework.amqp.AmqpException;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -59,6 +60,8 @@ public class CachingConnectionFactory extends AbstractConnectionFactory {
 
 	/** Synchronization monitor for the shared Connection */
 	private final Object connectionMonitor = new Object();
+
+    private ReturnListener listener;
 
 	/**
 	 * Create a new CachingConnectionFactory initializing the hostname to be the value returned from
@@ -105,8 +108,9 @@ public class CachingConnectionFactory extends AbstractConnectionFactory {
 	 * 
 	 * @param rabbitConnectionFactory the target ConnectionFactory
 	 */
-	public CachingConnectionFactory(com.rabbitmq.client.ConnectionFactory rabbitConnectionFactory) {
+	public CachingConnectionFactory(com.rabbitmq.client.ConnectionFactory rabbitConnectionFactory, ReturnListener listener) {
 		super(rabbitConnectionFactory);
+        this.listener = listener;
 	}
 
 	public void setChannelCacheSize(int sessionCacheSize) {
@@ -368,6 +372,10 @@ public class CachingConnectionFactory extends AbstractConnectionFactory {
 
 		public Channel createChannel(boolean transactional) {
 			Channel channel = getChannel(transactional);
+            if (null != listener) {
+                channel.addReturnListener(listener);
+            }
+
 			return channel;
 		}
 

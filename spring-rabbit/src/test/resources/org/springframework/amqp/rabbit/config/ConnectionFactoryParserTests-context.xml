@@ -8,7 +8,7 @@
 		channel-cache-size="10" port="6888" username="user" password="password" />
 
 	<rabbit:connection-factory id="native" connection-factory="connectionFactory" channel-cache-size="10" />
-	
+
 	<bean id="connectionFactory" class="com.rabbitmq.client.ConnectionFactory"/>
 
 </beans>

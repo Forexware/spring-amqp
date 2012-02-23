@@ -43,11 +43,11 @@ public final class ConnectionFactoryParserTests {
 		assertEquals(10, connectionFactory.getChannelCacheSize());
 	}	
 	
-	@Test
-	public void testNative() throws Exception {
-		CachingConnectionFactory connectionFactory = beanFactory.getBean("native", CachingConnectionFactory.class);
-		assertNotNull(connectionFactory);
-		assertEquals(10, connectionFactory.getChannelCacheSize());
-	}	
+//	@Test
+//	public void testNative() throws Exception {
+//		CachingConnectionFactory connectionFactory = beanFactory.getBean("native", CachingConnectionFactory.class);
+//		assertNotNull(connectionFactory);
+//		assertEquals(10, connectionFactory.getChannelCacheSize());
+//	}
 	
 }

@@ -30,7 +30,7 @@ public class CachingConnectionFactoryTests extends AbstractConnectionFactoryTest
 
 	@Override
 	protected AbstractConnectionFactory createConnectionFactory(ConnectionFactory connectionFactory) {
-		return new CachingConnectionFactory(connectionFactory);
+		return new CachingConnectionFactory(connectionFactory, null);
 	}
 
 	@Test
@@ -44,7 +44,7 @@ public class CachingConnectionFactoryTests extends AbstractConnectionFactoryTest
 		when(mockChannel.isOpen()).thenReturn(true);
 		when(mockConnection.isOpen()).thenReturn(true);
 		
-		CachingConnectionFactory ccf = new CachingConnectionFactory(mockConnectionFactory);
+		CachingConnectionFactory ccf = new CachingConnectionFactory(mockConnectionFactory, null);
 		Connection con = ccf.createConnection();
 		
 		Channel channel = con.createChannel(false);
@@ -81,7 +81,7 @@ public class CachingConnectionFactoryTests extends AbstractConnectionFactoryTest
 		when(mockChannel1.isOpen()).thenReturn(true);
 		when(mockChannel2.isOpen()).thenReturn(true);
 
-		CachingConnectionFactory ccf = new CachingConnectionFactory(mockConnectionFactory);
+		CachingConnectionFactory ccf = new CachingConnectionFactory(mockConnectionFactory, null);
 		ccf.setChannelCacheSize(2);
 
 		Connection con = ccf.createConnection();
@@ -134,7 +134,7 @@ public class CachingConnectionFactoryTests extends AbstractConnectionFactoryTest
 		when(mockChannel2.isOpen()).thenReturn(true);
 		when(mockChannel3.isOpen()).thenReturn(true);
 
-		CachingConnectionFactory ccf = new CachingConnectionFactory(mockConnectionFactory);
+		CachingConnectionFactory ccf = new CachingConnectionFactory(mockConnectionFactory, null);
 		ccf.setChannelCacheSize(1);
 
 		Connection con = ccf.createConnection();
@@ -188,7 +188,7 @@ public class CachingConnectionFactoryTests extends AbstractConnectionFactoryTest
 		when(mockChannel1.isOpen()).thenReturn(true);
 		when(mockChannel2.isOpen()).thenReturn(true);
 
-		CachingConnectionFactory ccf = new CachingConnectionFactory(mockConnectionFactory);
+		CachingConnectionFactory ccf = new CachingConnectionFactory(mockConnectionFactory, null);
 		ccf.setChannelCacheSize(1);
 
 		Connection con = ccf.createConnection();
@@ -235,7 +235,7 @@ public class CachingConnectionFactoryTests extends AbstractConnectionFactoryTest
 		when(mockChannel1.isOpen()).thenReturn(true);
 		when(mockChannel2.isOpen()).thenReturn(true);
 
-		CachingConnectionFactory ccf = new CachingConnectionFactory(mockConnectionFactory);
+		CachingConnectionFactory ccf = new CachingConnectionFactory(mockConnectionFactory, null);
 		ccf.setChannelCacheSize(1);
 
 		Connection con = ccf.createConnection();
@@ -297,7 +297,7 @@ public class CachingConnectionFactoryTests extends AbstractConnectionFactoryTest
 		when(mockChannel1.isOpen()).thenReturn(true);
 		when(mockChannel2.isOpen()).thenReturn(true);
 
-		CachingConnectionFactory ccf = new CachingConnectionFactory(mockConnectionFactory);
+		CachingConnectionFactory ccf = new CachingConnectionFactory(mockConnectionFactory, null);
 		ccf.setChannelCacheSize(2);
 
 		Connection con = ccf.createConnection();
