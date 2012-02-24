@@ -110,6 +110,8 @@ public class RabbitTemplate extends RabbitAccessor implements RabbitOperations, 
 
 	private final Map<String, LinkedBlockingQueue<Message>> replyHolder = new ConcurrentHashMap<String, LinkedBlockingQueue<Message>>();
 
+    private boolean isMandatory = false;
+
 	/**
 	 * Convenient constructor for use with setter injection. Don't forget to set the connection factory.
 	 */
@@ -123,9 +125,20 @@ public class RabbitTemplate extends RabbitAccessor implements RabbitOperations, 
 	 * @param connectionFactory the connection factory to use
 	 */
 	public RabbitTemplate(ConnectionFactory connectionFactory) {
-		this();
-		setConnectionFactory(connectionFactory);
-		afterPropertiesSet();
+        this();
+        setConnectionFactory(connectionFactory);
+        afterPropertiesSet();
+	}
+
+	/**
+	 * Create a rabbit template with default strategies and settings.
+	 *
+	 * @param connectionFactory the connection factory to use
+     * @param isMandatory the mandatory flag value for all produced messages
+	 */
+	public RabbitTemplate(ConnectionFactory connectionFactory, boolean isMandatory) {
+        this(connectionFactory);
+        this.isMandatory = isMandatory;
 	}
 
 	/**
@@ -495,7 +508,7 @@ public class RabbitTemplate extends RabbitAccessor implements RabbitOperations, 
 			routingKey = this.routingKey;
 		}
 
-		channel.basicPublish(exchange, routingKey, false, false,
+		channel.basicPublish(exchange, routingKey, this.isMandatory, false,
 				this.messagePropertiesConverter.fromMessageProperties(message.getMessageProperties(), encoding),
 				message.getBody());
 		// Check if commit needed
