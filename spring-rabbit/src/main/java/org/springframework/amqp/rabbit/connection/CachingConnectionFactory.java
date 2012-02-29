@@ -367,16 +367,15 @@ public class CachingConnectionFactory extends AbstractConnectionFactory {
 		}
 
 		private Channel createBareChannel(boolean transactional) {
-			return target.createChannel(transactional);
-		}
-
-		public Channel createChannel(boolean transactional) {
-			Channel channel = getChannel(transactional);
+			Channel channel = target.createChannel(transactional);
             if (null != listener) {
                 channel.addReturnListener(listener);
             }
+            return channel;
+		}
 
-			return channel;
+		public Channel createChannel(boolean transactional) {
+			return getChannel(transactional);
 		}
 
 		public void close() {
